@@ -1,0 +1,57 @@
+const express = require("express");
+const router = express.Router();
+
+// Controller
+const {
+  register,
+  login,
+  getCurrentUser,
+  update,
+  getUserById,
+  addFinishedLesson,
+  resetLessons,
+  promoteToDev,
+} = require("../controllers/UserController");
+const {
+  userCreateValidation,
+  loginValidation,
+  userUpdateValidation,
+  addLessonValidation,
+} = require("../middlewares/userValidations");
+
+// Middlewares
+const validate = require("../middlewares/handleValidation");
+const authGuard = require("../middlewares/authGuard");
+const devValidate = require("../middlewares/devValidation")
+const { imageUpload } = require("../middlewares/imageUpload");
+
+// Routes
+router.post("/register", userCreateValidation(), validate, register);
+router.post("/login", loginValidation(), validate, login);
+router.get("/profile", authGuard, getCurrentUser);
+router.put(
+  "/",
+  authGuard,
+  userUpdateValidation(),
+  validate,
+  imageUpload.single("profileImage"),
+  update
+);
+router.get("/:id", getUserById);
+router.put(
+  "/addlesson",
+  authGuard,
+  addLessonValidation(),
+  validate,
+  addFinishedLesson
+);
+router.put(
+  "/promote/:id",
+  authGuard,
+  devValidate,
+  promoteToDev
+);
+
+router.delete("/resetlessons", authGuard, resetLessons);
+
+module.exports = router;
