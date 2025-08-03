@@ -1,8 +1,11 @@
 const User = require("../models/User");
+const UserToken = require("../models/UserToken");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+
+const { encryptDate, decryptDate } = require("../utils/cryptDate.js");
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -13,7 +16,8 @@ const generateToken = (id) => {
 
 // Register user and sign in
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email } = req.body;
+  const { usertoken } = req.headers;
 
   // check if user exists
   const user = await User.findOne({ email });
@@ -23,15 +27,40 @@ const register = async (req, res) => {
     return;
   }
 
-  // Generate password hash
-  const salt = await bcrypt.genSalt();
-  const passwordHash = await bcrypt.hash(password, salt);
+  // Get User Token
+  const userTokenBD = await UserToken.findOne({ email });
+
+  if (!userTokenBD) {
+    res
+      .status(404)
+      .json({ errors: ["O Token desse usuario não foi encontrado."] });
+    return;
+  }
+
+  const isTokenMatch = await bcrypt.compare(usertoken, userTokenBD.tokenNum);
+
+  if (!isTokenMatch) {
+    res.status(401).json({ errors: ["Token de usuario inválido."] });
+    return;
+  }
+
+  const userTokenDate = decryptDate(userTokenBD._id);
+
+  if (!userTokenDate) {
+    res.status(404).json({ errors: ["Token não encontrado."] });
+    return;
+  }
+
+  if ((Date.now() - userTokenDate) >= 5 * 60 * 1000) {
+    res.status(401).json({ errors: ["Token expirado."] });
+    return;
+  }
+  await encryptDate(userTokenBD._id)
 
   // Create user
   const newUser = await User.create({
     name,
     email,
-    password: passwordHash,
     lang: "pt-br",
     role: "user",
   });
@@ -52,7 +81,8 @@ const register = async (req, res) => {
 
 // Sign user in
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
+  const { usertoken } = req.headers;
 
   const user = await User.findOne({ email });
 
@@ -62,11 +92,36 @@ const login = async (req, res) => {
     return;
   }
 
-  // Check if password matches
-  if (!(await bcrypt.compare(password, user.password))) {
-    res.status(422).json({ errors: ["Senha inválida."] });
+  // Get User Token
+  const userTokenBD = await UserToken.findOne({ email });
+
+  if (!userTokenBD) {
+    res
+      .status(404)
+      .json({ errors: ["O Token desse usuario não foi encontrado."] });
     return;
   }
+
+  const isTokenMatch = await bcrypt.compare(usertoken, userTokenBD.tokenNum);
+
+  if (!isTokenMatch) {
+    res.status(401).json({ errors: ["Token de usuario inválido."] });
+    return;
+  }
+
+  const userTokenDate = await decryptDate(userTokenBD._id);
+
+  if (!userTokenDate) {
+    res.status(404).json({ errors: ["Token não encontrado."] });
+    return;
+  }
+
+  if ((Date.now() - userTokenDate) >= 5 * 60 * 1000) {
+    res.status(401).json({ errors: ["Token expirado."] });
+    return;
+  }
+
+  await encryptDate(userTokenBD._id)
 
   res.status(201).json({
     _id: user._id,
@@ -85,7 +140,7 @@ const getCurrentUser = async (req, res) => {
 
 // Update an user
 const update = async (req, res) => {
-  const { name, password, lang } = req.body;
+  const { name, lang } = req.body;
 
   let profileImage = null;
 
@@ -95,20 +150,10 @@ const update = async (req, res) => {
 
   const reqUser = req.user;
 
-  const user = await User.findById(
-    new mongoose.Types.ObjectId(reqUser._id)
-  ).select("-password");
+  const user = await User.findById(new mongoose.Types.ObjectId(reqUser._id));
 
   if (name) {
     user.name = name;
-  }
-
-  if (password) {
-    // Generate password hash
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    user.password = passwordHash;
   }
 
   if (profileImage) {
@@ -129,9 +174,7 @@ const getUserById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await User.findById(new mongoose.Types.ObjectId(id)).select(
-      "-password"
-    );
+    const user = await User.findById(new mongoose.Types.ObjectId(id));
 
     // Check if user exists
     if (!user) {
@@ -170,9 +213,7 @@ const addFinishedLesson = async (req, res) => {
 const resetLessons = async (req, res) => {
   const reqUser = req.user;
 
-  const user = await User.findById(
-    new mongoose.Types.ObjectId(reqUser._id)
-  ).select("-password");
+  const user = await User.findById(new mongoose.Types.ObjectId(reqUser._id));
 
   user.finishedLessons = [];
   await user.save();
@@ -185,7 +226,8 @@ const promoteToDev = async (req, res) => {
 
   try {
     const user = await User.findById(id);
-    if (!user) return res.status(404).json({ errors: ["Usuário não encontrado."] });
+    if (!user)
+      return res.status(404).json({ errors: ["Usuário não encontrado."] });
 
     user.role = "dev";
     await user.save();

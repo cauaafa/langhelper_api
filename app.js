@@ -1,5 +1,3 @@
-// aqui é o Cauã - utilizei de um tutorial de React.JS q eu tenho, ele tem uma seção que usa MongoDB
-// ainda não sei usar Node.JS, então copiei do projeto fazendo adaptações
 
 require("dotenv").config()
 

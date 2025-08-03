@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, header } = require("express-validator");
 
 const userCreateValidation = () => {
   return [
@@ -12,20 +12,11 @@ const userCreateValidation = () => {
       .withMessage("O e-mail é obrigatório")
       .isEmail()
       .withMessage("Insira um e-mail válido."),
-    body("password")
-      .isString()
-      .withMessage("A senha é obrigatória.")
-      .isLength({ min: 8 })
-      .withMessage("A senha precisa ter no mínimo 8 caracteres."),
-    body("confirmpassword")
-      .isString()
-      .withMessage("A confirmação de senha é obrigatória.")
-      .custom((value, { req }) => {
-        if (value != req.body.password) {
-          throw new Error("As senhas não são iguais.");
-        }
-        return true;
-      }),
+    header("userToken")
+      .isNumeric()
+      .withMessage("O token é obrigatório.")
+      .isLength({ min: 6, max: 6 })
+      .withMessage("O token precisa ter 6 caracteres."),
   ];
 };
 
@@ -36,7 +27,11 @@ const loginValidation = () => {
       .withMessage("O e-mail é obrigatório.")
       .isEmail()
       .withMessage("Insira um e-mail válido"),
-    body("password").isString().withMessage("A senha é obrigatória."),
+    header("userToken")
+      .isNumeric()
+      .withMessage("O token é obrigatória.")
+      .isLength({ min: 6, max: 6 })
+      .withMessage("O token precisa ter 6 caracteres."),
   ];
 };
 
@@ -46,10 +41,6 @@ const userUpdateValidation = () => {
       .optional()
       .isLength({ min: 3 })
       .withMessage("O nome precisa ter no mínimo 3 caracteres."),
-    body("password")
-      .optional()
-      .isLength({ min: 5 })
-      .withMessage("A senha precisa de no mínimo 5 caracteres."),
     body("lang")
       .optional()
       .isString()
