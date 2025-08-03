@@ -29,20 +29,20 @@ The backend API for LangHelper - a language learning platform that provides stru
 git clone https://github.com/your-username/langhelper-api.git
 cd langhelper-api
 
-2. Install dependencies:
-npm install
+2. Install dependencies: __
+npm install __
 
-3. Create.env file with:
-PORT=5000
-DB_USER=your_mongodb_user
-DB_PASS=your_mongodb_password\n
-JWT_SECRET=your_jwt_secret
-SENDGRID_API_KEY=your_sendgrid_key
-SENDGRID_API_EMAIL=your@email.com
-CRYPT_PASS=encryption_pass
-CRYPT_SALT=encryption_salt
+3. Create.env file with: __
+PORT=5000 __
+DB_USER=your_mongodb_user __
+DB_PASS=your_mongodb_password __
+JWT_SECRET=your_jwt_secret __
+SENDGRID_API_KEY=your_sendgrid_key __
+SENDGRID_API_EMAIL=your@email.com __
+CRYPT_PASS=encryption_pass __
+CRYPT_SALT=encryption_salt __
 
-4. Start server:
+4. Start server: __
 npm run server
 
 ## Request Routes:
@@ -101,8 +101,8 @@ Requests info:
 
 1. Create production MongoDB cluster
 2. Set enviroment variables in hosting platform
-3. Install dependencies:
-npm install --production
+3. Install dependencies: __
+npm install --production __
 
-4. Start server:
+4. Start server: __
 node app.js
