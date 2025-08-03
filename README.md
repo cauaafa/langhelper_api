@@ -46,14 +46,17 @@ CRYPT_SALT=encryption_salt
 npm run server
 
 ## Request Routes:
-Core Routes:
-GET - / - Checks if API is working (root endpoint)
-GET - /api/courses - Gets all courses
-GET - /api/courses/lang/:lang - Gets courses by language
-GET - /api/courses/:id - Gets course by ID
-GET - /api/lessons/:id - Gets lesson by ID
-GET - /api/users/profile - Gets current user profile
-GET - /api/users/:id - Gets user by ID
+<details> <summary><strong>🌐 Core Routes</strong></summary>
+| Method | Endpoint                  | Description              |
+| ------ | ------------------------- | ------------------------ |
+| GET    | `/`                       | API status check         |
+| GET    | `/api/courses`            | Get all courses          |
+| GET    | `/api/courses/lang/:lang` | Get courses by language  |
+| GET    | `/api/courses/:id`        | Get course by ID         |
+| GET    | `/api/lessons/:id`        | Get lesson by ID         |
+| GET    | `/api/users/profile`      | Get current user profile |
+| GET    | `/api/users/:id`          | Get user by ID           |
+
 
 Authentication Routes
 POST - /api/users/register - Registers new user
