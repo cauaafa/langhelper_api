@@ -46,59 +46,56 @@ CRYPT_SALT=encryption_salt
 npm run server
 
 ## Request Routes:
-<details> <summary><strong>🌐 Core Routes</strong></summary>
-| Method | Endpoint                  | Description              |
-| ------ | ------------------------- | ------------------------ |
-| GET    | `/`                       | API status check         |
-| GET    | `/api/courses`            | Get all courses          |
-| GET    | `/api/courses/lang/:lang` | Get courses by language  |
-| GET    | `/api/courses/:id`        | Get course by ID         |
-| GET    | `/api/lessons/:id`        | Get lesson by ID         |
-| GET    | `/api/users/profile`      | Get current user profile |
-| GET    | `/api/users/:id`          | Get user by ID           |
-
+Core Routes:
+-GET - / - Checks if API is working (root endpoint)
+-GET - /api/courses - Gets all courses
+-GET - /api/courses/lang/:lang - Gets courses by language
+-GET - /api/courses/:id - Gets course by ID
+-GET - /api/lessons/:id - Gets lesson by ID
+-GET - /api/users/profile - Gets current user profile
+-GET - /api/users/:id - Gets user by ID
 
 Authentication Routes
-POST - /api/users/register - Registers new user
-POST - /api/users/login - Logs in user
-POST - /api/tokens/create - Creates and sends user token via email
+-POST - /api/users/register - Registers new user
+-POST - /api/users/login - Logs in user
+-POST - /api/tokens/create - Creates and sends user token via email
 
 User Management
-PUT - /api/users/ - Updates user profile
-PUT - /api/users/addlesson - Marks lesson as completed
-DELETE - /api/users/resetlessons - Resets user's completed lessons
+-PUT - /api/users/ - Updates user profile
+-PUT - /api/users/addlesson - Marks lesson as completed
+-DELETE - /api/users/resetlessons - Resets user's completed lessons
 
 User Management (Dev Only)
-PUT - /api/users/promote/:id - Promotes user to developer role
+-PUT - /api/users/promote/:id - Promotes user to developer role
 
 Course Management (Dev Only)
-POST - /api/courses/create - Creates new course
-PUT - /api/courses/:id - Updates course
-DELETE - /api/courses/:id - Deletes course
-POST - /api/courses/:id/unit - Adds unit to course
-PUT - /api/courses/:id/unit/:unitId - Updates unit
-DELETE - /api/courses/:id/unit/:unitId - Deletes unit
+-POST - /api/courses/create - Creates new course
+-PUT - /api/courses/:id - Updates course
+-DELETE - /api/courses/:id - Deletes course
+-POST - /api/courses/:id/unit - Adds unit to course
+-PUT - /api/courses/:id/unit/:unitId - Updates unit
+-DELETE - /api/courses/:id/unit/:unitId - Deletes unit
 
 Lesson Management (Dev Only)
-POST - /api/lessons/create/:id/unit/:unitId - Creates new lesson
-PUT - /api/lessons/:id - Updates lesson
-DELETE - /api/lessons/:courseId/unit/:unitId/lesson/:id - Deletes lesson
+-POST - /api/lessons/create/:id/unit/:unitId - Creates new lesson
+-PUT - /api/lessons/:id - Updates lesson
+-DELETE - /api/lessons/:courseId/unit/:unitId/lesson/:id - Deletes lesson
 
 Exercise Management (Dev Only)
-POST - /api/exercises/:id - Creates new exercise
-PUT - /api/exercises/:id/exercise/:exerciseId - Updates exercise
-DELETE - /api/exercises/:id/exercise/:exerciseId - Deletes exercise
+-POST - /api/exercises/:id - Creates new exercise
+-PUT - /api/exercises/:id/exercise/:exerciseId - Updates exercise
+-DELETE - /api/exercises/:id/exercise/:exerciseId - Deletes exercise
 
 Option Management (Dev Only)
-POST - /api/options/:lessonId/exercise/:exerciseId - Creates new option
-PUT - /api/options/answer/:lessonId/exercise/:exerciseId/option/:optionId - Sets answer
-PUT - /api/options/:lessonId/exercise/:exerciseId/option/:optionId - Updates option
-DELETE - /api/options/:lessonId/exercise/:exerciseId/option/:optionId - Deletes option
+-POST - /api/options/:lessonId/exercise/:exerciseId - Creates new option
+-PUT - /api/options/answer/:lessonId/exercise/:exerciseId/option/:optionId - Sets answer
+-PUT - /api/options/:lessonId/exercise/:exerciseId/option/:optionId - Updates option
+-DELETE - /api/options/:lessonId/exercise/:exerciseId/option/:optionId - Deletes option
 
 - Protected routes require Authorization: Bearer <token> header
 - Token routes require userToken: <6-digit-code> header
 - All routes return JSON responses
-
+  
 ## Deployment:
 
 1. Create production MongoDB cluster
