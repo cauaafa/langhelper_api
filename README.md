@@ -35,7 +35,7 @@ npm install
 3. Create.env file with:
 PORT=5000
 DB_USER=your_mongodb_user
-DB_PASS=your_mongodb_password
+DB_PASS=your_mongodb_password\n
 JWT_SECRET=your_jwt_secret
 SENDGRID_API_KEY=your_sendgrid_key
 SENDGRID_API_EMAIL=your@email.com
