@@ -24,6 +24,12 @@ The backend API for LangHelper - a language learning platform that provides stru
 - **File Upload:** Multer
 - **Validation:** Express Validator
 
+## Planning to add in the future
+- **Google OAuth**
+- **Swagger**
+- **Unit tests**
+- **Docker**
+
 ## Installation
 1. Clone repository:
 - git clone https://github.com/your-username/langhelper-api.git
