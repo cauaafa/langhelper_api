@@ -24,7 +24,7 @@ The backend API for LangHelper - a language learning platform that provides stru
 - **File Upload:** Multer
 - **Validation:** Express Validator
 
-## Planning to add in the future
+## Planning to implement in the future
 - **Google OAuth**
 - **Swagger**
 - **Unit tests**
