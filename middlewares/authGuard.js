@@ -20,6 +20,12 @@ const authGuard = async (req, res, next) => {
 
     req.user = await User.findById(verified.id).select();
 
+    if (!req.user) return res.status(404).json({ errors: ["Usuário não encontrado."] });
+
+    if (req.user.authProvider === "google") {
+      return next();
+    }
+
     const userToken = await UserToken.findOne({ email: req.user.email });
 
     const isTokenMatch = await bcrypt.compare(authUserToken, userToken.tokenNum)

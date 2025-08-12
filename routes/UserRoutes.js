@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const passport = require("../config/passport");
+
 // Controller
 const {
   register,
@@ -11,6 +13,7 @@ const {
   addFinishedLesson,
   resetLessons,
   promoteToDev,
+  googleLogin,
 } = require("../controllers/UserController");
 const {
   userCreateValidation,
@@ -28,6 +31,22 @@ const { imageUpload } = require("../middlewares/imageUpload");
 // Routes
 router.post("/register", userCreateValidation(), validate, register);
 router.post("/login", loginValidation(), validate, login);
+
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+router.get("/google/callback", passport.authenticate("google", { session: false }),
+  (req, res) => {
+    const { token, user } = req.user;
+    res.json({
+      _id: user._id,
+      profileImage: user.profileImage,
+      name: user.name,
+      token,
+      provider: "google"
+    });
+  }
+);
+
 router.get("/profile", authGuard, getCurrentUser);
 router.put(
   "/",

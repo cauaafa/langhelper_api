@@ -92,6 +92,11 @@ const login = async (req, res) => {
     return;
   }
 
+  if (user.authProvider == "google") {
+    res.status(422).json({ errors: ["Esse e-mail já esta sendo utilizado com a autenticação do google."]})
+    return;
+  }
+
   // Get User Token
   const userTokenBD = await UserToken.findOne({ email });
 

@@ -14,15 +14,21 @@ The backend API for LangHelper - a language learning platform that provides stru
 - RESTful API endpoints
 - Image upload support
 - Role-based access control (User/Dev)
+- Google OAuth 2.0 Authentication
 
 ## Tech Stack
 - **Runtime:** Node.js
 - **Framework:** Express
 - **Database:** MongoDB (Mongoose ODM)
-- **Authentication:** JWT, bcrypt
+- **Authentication:** JWT, bcrypt, Google OAuth 2.0
 - **Email:** SendGrid
 - **File Upload:** Multer
 - **Validation:** Express Validator
+
+## Planning to implement in the future
+- **Swagger**
+- **Unit tests**
+- **Docker**
 
 ## Installation
 1. Clone repository:
@@ -59,6 +65,10 @@ Authentication Routes
 - POST - /api/users/register - Registers new user
 - POST - /api/users/login - Logs in user
 - POST - /api/tokens/create - Creates and sends user token via email
+
+Google Authentication Routes
+- GET - /api/auth/google - Initiates Google OAuth flow
+- GET - /api/auth/google/callback - Google OAuth callback handler
 
 User Management
 - PUT - /api/users/ - Updates user profile

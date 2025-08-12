@@ -7,6 +7,8 @@ const userSchema = new Schema(
     email: String,
     profileImage: String,
     lang: String,
+    googleId: String,
+    authProvider: { type: String, enum: ["local", "google"], default: "local" },
     role: {
       type: String,
       enum: ["user", "dev"],
